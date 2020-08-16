@@ -1,0 +1,15 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/usr/src/app
+      - yarn-cache:/usr/local/share/.cache/yarn/v6
+
+    ports:
+      - "8000:8000"
+    tty: true
+    stdin_open: true
+volumes:
+  yarn-cache:
