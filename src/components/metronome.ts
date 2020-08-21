@@ -1,5 +1,10 @@
+import { tempo } from "./tempo";
+
+const HIGH = 1500;
+const LOW = 1200;
 export class Metronome {
   rhythm: object;
+  nBeat: number;
   lastClickTimeStamp: number;
   clickSchedulerTimerID: NodeJS.Timeout;
   beatCountTimeOutIDs: number[];
@@ -7,6 +12,7 @@ export class Metronome {
 
   constructor(rhythm = {}) {
     this.rhythm = rhythm;
+    this.nBeat = 1;
     this.clickSchedulerTimerID = null;
     this.beatCountTimeOutIDs = [];
     this.audio = new Audio();
@@ -15,13 +21,12 @@ export class Metronome {
   start() {
     // setIsPlayingTo(true);
     // Define
-    // let nBeat = 1;
     // if (isMusicMode) {
     //   setTempo(this.rhythm[count].tempo);
     //   setBeats(this.rhythm[count].beats);
     // }
 
-    this.audio.clickAt();
+    this.audio.clickAt({ frequency: HIGH });
     this.lastClickTimeStamp = this.audio.context.currentTime * 1000;
 
     // Loop start
@@ -43,11 +48,11 @@ export class Metronome {
     //   clearTimeout(timeOutID);
     // });
   }
+
   // Loop function
   clickScheduler() {
     const now = this.audio.context.currentTime * 1000;
-    let tick = (1000 * 60) / 60;
-    // let tick = (1000 * 60) / tempo;
+    let tick = (1000 * 60) / tempo;
 
     for (
       let nextClickTimeStamp = this.lastClickTimeStamp + tick;
@@ -58,7 +63,7 @@ export class Metronome {
         continue;
       }
 
-      // nBeat++;
+      this.nBeat++;
       // if (isMusicMode) {
       //   if (nBeat > beats.value) {
       //     setCount(count + 1);
@@ -77,16 +82,17 @@ export class Metronome {
       //     tick = (1000 * 60) / tempo;
       //   }
       // } else {
-      //   if (nBeat > beats.value) {
-      //     nBeat = 1;
-      //   }
+      if (this.nBeat > 4) {
+        // if (this.nBeat > beats.value) {
+        this.nBeat = 1;
+      }
       // }
 
       // 予約時間をループで使っていたDOMHighResTimeStampからAudioContext向けに変換
       const nextClickTime = nextClickTimeStamp / 1000;
 
       // Hi & Low tone
-      // if (nBeat === 1) {
+      const frequency = this.nBeat === 1 ? HIGH : LOW;
       //   this.osc.frequency.setValueAtTime(this.highTone, nextClickTime);
       // } else {
       //   this.osc.frequency.setValueAtTime(this.lowTone, nextClickTime);
@@ -111,7 +117,7 @@ export class Metronome {
       // );
 
       // Reserve next click
-      this.audio.clickAt(nextClickTime);
+      this.audio.clickAt({ startTime: nextClickTime, frequency: frequency });
 
       // Update lastClickTimeStamp
       this.lastClickTimeStamp = nextClickTimeStamp;
@@ -120,18 +126,11 @@ export class Metronome {
 }
 
 class Audio {
-  gainValue: number;
-  highTone: number;
-  lowTone: number;
   context: AudioContext;
   osc: OscillatorNode;
   gain: GainNode;
 
   constructor(gainValue = 0.1, highTone = 1500, lowTone = 1200) {
-    this.gainValue = gainValue;
-    this.highTone = highTone;
-    this.lowTone = lowTone;
-
     // Web audio api settings
     this.context = new AudioContext();
     this.osc = this.context.createOscillator();
@@ -139,12 +138,20 @@ class Audio {
 
     this.gain.gain.value = 0;
     this.osc.connect(this.gain).connect(this.context.destination);
-    this.osc.frequency.value = this.highTone;
     this.osc.start();
   }
   // Reserve click
-  clickAt(startTime: number = 0) {
-    this.gain.gain.setValueAtTime(this.gainValue, startTime);
+  clickAt({
+    startTime = 0,
+    frequency = 1200,
+    gainValue = 0.1,
+  }: {
+    startTime?: number;
+    frequency?: number;
+    gainValue?: number;
+  }) {
+    this.osc.frequency.setValueAtTime(frequency, startTime);
+    this.gain.gain.setValueAtTime(gainValue, startTime);
     this.gain.gain.linearRampToValueAtTime(0, startTime + 0.05);
   }
 }
