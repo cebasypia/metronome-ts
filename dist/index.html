@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Metronome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="manifest.json" />
+    <link href="https://fonts.googleapis.com/css?family=Caveat" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="container" id="main">
+      <header class="container" id="header">
+        <div class="child--centered first-column">
+          <label for="rhythm--file" class="child--centered button">
+            <i class=" material-icons">
+              folder_open
+            </i>
+          </label>
+          <input type="file" id="rhythm--file" />
+        </div>
+        <div class="child--centered third-column">
+          <select class="child--centered" id="music"></select>
+        </div>
+      </header>
+
+      <!-- CANVAS -->
+      <div class="child--centered" id="canvases">
+        <canvas class="canvas" id="base"></canvas>
+        <canvas class="canvas" id="animation"></canvas>
+        <div id="tempo"></div>
+      </div>
+
+      <!-- TEMPO -->
+      <div class="container" id="tempo--control">
+        <div class="child--centered first-column">
+          <button type="button" class="circle--button button-primary" id="tempo--down">
+            -
+          </button>
+        </div>
+        <div class="child--centered second-column">
+          <input type="range" class="ten columns input-range" id="tempo--range" />
+        </div>
+        <div class="child--centered third-column">
+          <button type="button" class="circle--button button-primary" id="tempo--up">
+            +
+          </button>
+        </div>
+      </div>
+
+      <!-- BAR -->
+      <div class="container child--centered" id="bar--control" style="visibility: hidden;">
+        <div class="first-column child--centered">
+          <button type="button" class="circle--button button-primary" id="bar--down">-</button>
+        </div>
+        <div class="second-column" id="mark">1</div>
+        <div class="third-column" id="bar">1</div>
+        <div class="fourth-column" id="count">1</div>
+        <div class="fifth-column child--centered">
+          <button type="button" class="circle--button button-primary" id="bar--plus">+</button>
+        </div>
+      </div>
+
+      <!-- BEATS, nBEAT, SETTING -->
+      <div class="container" id="settings--row">
+        <div class="child--centered first-column" id="beats">
+          <img src="./images/4_4.png" alt="拍子" />
+        </div>
+        <div class="child--centered second-column">♪</div>
+        <div class="child--centered third-column"></div>
+        <div class="child--centered fourth-column">
+          <i class="material-icons">
+            build
+          </i>
+        </div>
+      </div>
+
+      <!-- PLAY -->
+      <div class="child--centered" id="play--cell">
+        <button type="button" class="button-primary" id="play">
+          <i class="material-icons">
+            play_arrow
+          </i>
+        </button>
+      </div>
+
+    <script src="bundle.js"></script>
+  </body>
+</html>
