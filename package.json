@@ -4,7 +4,10 @@
     "build": "webpack",
     "watch": "webpack -w"
   },
-  "dependencies": {},
+  "dependencies": {
+    "css-loader": "^4.2.1",
+    "style-loader": "^1.2.1"
+  },
   "devDependencies": {
     "ts-loader": "^8.0.2",
     "typescript": "^3.9.7",

@@ -4,7 +4,7 @@ module.exports = {
   // モード値を production に設定すると最適化された状態で、
   // development に設定するとソースマップ有効でJSファイルが出力される
   mode: "development",
-  devtool: 'inline-source-map',//ブラウザでのデバッグ用にソースマップを出力する
+  devtool: "inline-source-map", //ブラウザでのデバッグ用にソースマップを出力する
 
   // メインとなるJavaScriptファイル（エントリーポイント）
   entry: path.join(__dirname, "src/main"),
@@ -14,12 +14,12 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     // 出力ファイル名
     filename: "bundle.js",
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
+    devtoolModuleFilenameTemplate: "[absolute-resource-path]",
   },
   devServer: {
-    openPage: "index.html",//自動で指定したページを開く
-    contentBase: path.join(__dirname, 'dist'),// HTML等コンテンツのルートディレクトリ
-    watchContentBase: true,//コンテンツの変更監視をする
+    openPage: "index.html", //自動で指定したページを開く
+    contentBase: path.join(__dirname, "dist"), // HTML等コンテンツのルートディレクトリ
+    watchContentBase: true, //コンテンツの変更監視をする
     host: "0.0.0.0",
     hot: true,
   },
@@ -30,7 +30,26 @@ module.exports = {
         test: /\.ts$/,
         exclude: /node_modules/,
         // TypeScript をコンパイルする
-        use: 'ts-loader',
+        use: "ts-loader",
+      },
+      // CSSファイルの読み込み
+      {
+        // 対象となるファイルの拡張子
+        test: /\.css/,
+        use: [
+          // linkタグに出力する機能
+          "style-loader",
+          // CSSをバンドルするための機能
+          {
+            loader: "css-loader",
+            options: {
+              // オプションでCSS内のurl()メソッドの取り込みを禁止する
+              url: false,
+              // ソースマップを有効にする
+              sourceMap: true,
+            },
+          },
+        ],
       },
     ],
   },
