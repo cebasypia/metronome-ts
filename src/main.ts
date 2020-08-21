@@ -6,5 +6,7 @@ import "./styles/metronome.css";
 import "./styles/header.css";
 
 import { addPlaybackEvent } from "./components/playback";
+import { addTempoEvents } from "./components/tempo";
 
 addPlaybackEvent();
+addTempoEvents();
